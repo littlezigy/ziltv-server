@@ -4,6 +4,22 @@ module.exports = {
     fetch() {
         return Promise.resolve(true);
     },
+    fetchByID(id) {
+        const query = `SELECT * FROM users where _id=$1`;
+
+        return db.query(query, [id])
+        .then(res => {
+            res = res.rows;
+
+            if(res.length == 1) {
+                res = res[0]
+                const {_id: id, username, password, name, links, avatar, email} = res;
+                return {
+                    id, username, password, name, avatar,email, links
+                }
+            } else return false;
+        });
+    },
     fetchByUsername(username) {
         const query = `SELECT * FROM users where username=$1`;
 

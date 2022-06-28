@@ -65,5 +65,105 @@ describe('Routes', function() {
                 expect(res.headers['set-cookie'][0]).to.match(/^ziltv\.cookie/);
             });
     });
+
+    it('View another user\'s profile', function() {
+        const data = users[8];
+        const profile = { ...data }
+
+        delete profile.password;
+
+        return request(app).get('/profile/' + data.id)
+            .then(res => {
+                expect(res.body).to.deep.contain(profile);
+            });
+    });
+
+    it('View, and edit own user profile', function() {
+        const data = users[5];
+        const profile = { ...data }
+
+        delete profile.password;
+        delete profile.bech32Address;
+        delete profile.zil_bech32;
+
+        const newProfile = {
+            name: faker.name.findName(),
+            username: faker.internet.userName(),
+            email: faker.internet.email()
+        }
+
+        let cookie;
+
+        return request(app).post('/login').send(data)
+            .then(res => {
+                cookie = res.headers['set-cookie'][0];
+
+                // View own profile
+                return request(app).get('/profile').set('Cookie', cookie)
+            })
+            .then(res => {
+                // expect(res.body).to.deep.contain(profile);
+
+                // Edit profile
+                return request(app).put('/profile').send(newProfile).set('Cookie', cookie)
+            })
+            .then(res => request(app).get('/profile').set('Cookie', cookie))
+            .then(res => {
+                expect(res.body).to.contain(newProfile);
+            });
+    });
+
+    it('View all videos', function() {
+        return request(app).get('/videos')
+            .then(res => {
+                expect(res.body).to.not.be.empty;
+            })
+    });
+
+    it('Post, view and edit video', function() {
+        const creator = users[1];
+        let cookie;
+
+        const data = {
+            url: faker.internet.url(),
+            name: faker.commerce.productName(),
+            description: faker.lorem.sentence()
+        };
+
+        const newData = {
+            url: faker.internet.url(),
+            name: faker.commerce.productName(),
+            description: faker.lorem.sentence()
+        };
+
+        return request(app).post('/login').send({ username: creator.username, password: creator.password })
+            .then(res => {
+                cookie = res.headers['set-cookie'][0];
+
+                return request(app).post('/video').send(data).set('Cookie', cookie)
+            })
+            .then(res => {
+                expect(res.body).to.have.property('id').that.is.a('number');
+                return request(app).get('/video/' + res.body.id)
+            })
+            .then(res => {
+                expect(res.body).to.have.property('id').that.is.a('number');
+                expect(res.body).to.contain(data);
+
+                return request(app).put('/video/'  + res.body.id).send(newData).set('Cookie', cookie);
+            })
+            .then(res => {
+                expect(res.body).to.have.property('id').that.is.a('number');
+                return request(app).get('/video/' + res.body.id)
+            })
+            .then(res => {
+                expect(res.body).to.contain(newData);
+                return request(app).get('/videos')
+            })
+            .then(res => {
+                expect(res.body).to.not.be.empty;
+                expect(res.body).to.include.deep.members([newData]);
+            });
+    });
 });
 

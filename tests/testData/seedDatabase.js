@@ -12,14 +12,14 @@ module.exports = function() {
 
     Object.values(users).forEach(user => {
         if(user.hasAccount !== false && !user._no_account) {
-            let { id, name, username, email, zil_bech32, avatar, links, bio, shortBio } = user;
+            let { id, name, username, password, email, zil_bech32, avatar, links, bio, shortBio } = user;
             if(name && name.includes('\''))
                 name = name.replace(/'/, '\\\'');
             zil_bech32 = zil_bech32.toLowerCase()
 
-            const data = [id, name, email, username, avatar, JSON.stringify(links), zil_bech32, shortBio, bio];
+            const data = [id, name, email, username, password,  avatar, JSON.stringify(links), zil_bech32, shortBio, bio];
 
-            let query = `INSERT INTO users(_id, name, email, username, avatar, links, bech32_address, short_bio, bio) VALUES('${ data.join("', '") }');`;
+            let query = `INSERT INTO users(_id, name, email, username, password, avatar, links, bech32_address, short_bio, bio) VALUES('${ data.join("', '") }');`;
 
             promiseChain = promiseChain.then(() => db.query(query))
                 .catch(e => console.log('ERROR:', e, '\nQuery:', query));
@@ -27,10 +27,10 @@ module.exports = function() {
     });
 
     Object.values(videos).forEach(video => {
-        const query = `INSERT INTO videos(_id, name, description, url, creator) VALUES($1, $2, $3, $4, $5)`;
-        const { id, name, description, url, creator } = video;
+        const query = `INSERT INTO videos(_id, name, description, url, thumbnail_url, creator) VALUES($1, $2, $3, $4, $5, $6)`;
+        const { id, name, description, url, thumbnail, creator } = video;
 
-        const values = [id, name, description, url, creator];
+        const values = [id, name, description, url, thumbnail, creator];
         promiseChain = promiseChain.then(() => db.query(query, values))
             .catch(e => console.log('ERROR:', e, '\nQuery:', query));
     });

@@ -1,0 +1,6 @@
+exports.mochaHooks = {
+    /*
+    beforeAll() {
+    }
+    */
+}

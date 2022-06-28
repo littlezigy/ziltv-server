@@ -47,6 +47,7 @@ describe('Badge module', function() {
 
     it('Fetch creator badges', function() {
         const creator = 1;
+
         return badge.fetchCreatorBadges(creator)
         .then(res => {
             expect(res).to.have.lengthOf.at.least(4);

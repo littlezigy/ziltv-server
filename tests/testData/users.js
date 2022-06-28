@@ -4,8 +4,17 @@ const { faker } = require('@faker-js/faker');
 for(let i=0; i<10; i++) {
     const fname = faker.name.firstName().replace('\'', '');
     const lname = faker.name.lastName().replace('\'', '');
-    const name = fname + ' ' + lname;
-    const username = faker.internet.userName(fname, lname)
+    let name, username;
+
+    if(i == 0) {
+        name = "First user",
+        username = "first_user_on_ziltv"
+    } else {
+        name = fname + ' ' + lname;
+        username = faker.internet.userName(fname, lname)
+    }
+
+    const password = faker.internet.password();
     const email = faker.internet.exampleEmail(fname, lname);
     const zil_bech32 = faker.finance.ethereumAddress();
     const links = Array(faker.datatype.number(5)).fill(1)
@@ -22,6 +31,7 @@ for(let i=0; i<10; i++) {
         id: i + 1,
         name,
         username,
+        password,
         email,
         links,
         zil_bech32,
