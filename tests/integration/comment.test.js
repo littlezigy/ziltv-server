@@ -15,7 +15,6 @@ describe('Comment module', function() {
                 return  comment.fetch(res.id)
             })
             .then(res => {
-                console.log("res:", res);
                 expect(res).to.have.property('text', data.text);
                 expect(res).to.have.property('poster', data.poster);
                 expect(res).to.have.property('videoID', data.videoID);

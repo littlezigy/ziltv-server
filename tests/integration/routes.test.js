@@ -45,5 +45,25 @@ describe('Routes', function() {
                 expect(res.body).to.contain(data);
             });
     });
+
+    it('Signup and login', function() {
+        const data = {username: faker.internet.userName(), password: faker.internet.password()}
+
+        return request(app).post('/signup').send(data)
+            .then(res => {
+                expect(res.status).to.equal(200);
+                expect(res.headers).to.have.property('set-cookie');
+                expect(res.headers['set-cookie'][0]).to.have.string('ziltv.cookie');
+                expect(res.headers['set-cookie'][0]).to.match(/^ziltv\.cookie/);
+
+                return request(app).post('/login').send(data)
+            })
+            .then(res => {
+                expect(res.status).to.equal(200);
+                expect(res.headers).to.have.property('set-cookie');
+                expect(res.headers['set-cookie'][0]).to.have.string('ziltv.cookie');
+                expect(res.headers['set-cookie'][0]).to.match(/^ziltv\.cookie/);
+            });
+    });
 });
 

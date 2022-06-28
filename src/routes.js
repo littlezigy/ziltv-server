@@ -2,6 +2,7 @@ const router = require('express').Router();
 const errorHandler = require('./errorHandler');
 const badge = require('./badge');
 const comment = require('./comment');
+const user = require('./user');
 
 /*
 require('./user/routes')(router);
@@ -30,6 +31,16 @@ router.post('/comment', function(req, res) {
 router.get('/comment/:id', function(req, res) {
     console.log("Fetching:", req.params.id);
     return comment.fetch(req.params.id)
+        .then(payload => res.send(payload));
+});
+
+router.post('/login', function(req, res) {
+    return user.login(req.body, req)
+        .then(payload => res.send(payload));
+});
+
+router.post('/signup', function(req, res) {
+    return user.signup(req.body, req)
         .then(payload => res.send(payload));
 });
 
