@@ -6,6 +6,7 @@
   "scripts": {
     "start": "pm2 start ./bin/www.js --name ziltv_api",
     "stop": "pm2 stop ziltv_api && pm2 delete ziltv_api",
+    "restart": "npm run stop && npm i && npm run start",
     "dev": "npm run lint && . ./.env.local && NODE_ENV=development node ./bin/www.js",
     "test": "npm run lint && npm run test:unit && npm run test:integration && npm run test:functional --timeout 10000",
     "lint": "eslint src/ tests/ -c ./.eslintrc.js",
