@@ -48,7 +48,7 @@ module.exports = {
                             id: b._id,
                             badgeImg: b.image_uri,
                             nftAddress: b.nft_address,
-                            tokenIDs: b.tokenIDs,
+                            tokenIDs: b.token_ids,
                             creator: b.creator,
                             specifyTokens: b.specify_token
                         }

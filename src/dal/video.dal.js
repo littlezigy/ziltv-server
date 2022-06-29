@@ -66,7 +66,6 @@ module.exports = {
             .then(res => {
                 return res.rows.map(data => {
                     const {name, description, creator, url, thumbnail_url}=data;
-                    console.log( {id: data._id, name, description, creator, url, thumbnail: thumbnail_url});
                     return {id: data._id, name, description, creator, url, thumbnail: thumbnail_url}
                 });
             });

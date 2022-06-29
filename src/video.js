@@ -1,4 +1,5 @@
 const dal = require('./dal/video.dal');
+const badgeDal = require('./dal/badge.dal');
 const session = require('./session');
 
 module.exports = {
@@ -15,10 +16,23 @@ module.exports = {
     },
 
     fetch(id) {
-        return dal.fetchByID(id);
+        return dal.fetchByID(id)
+        .then(res => {
+            return badgeDal.fetchByCreator(res.creator)
+            .then(badgeConfigs => {
+                const creator = {id:res.creator};
+                return {...res,creator, badgeConfig: badgeConfigs};
+            });
+        });
     },
 
     fetchAll() {
         return dal.fetchAll()
+        .then(resArr => {
+            return resArr.map(res => {
+                const creator = {id:res.creator};
+                return {...res,creator};
+            });
+        });
     }
 }

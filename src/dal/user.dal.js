@@ -4,6 +4,19 @@ module.exports = {
     fetch() {
         return Promise.resolve(true);
     },
+    fetchByIDs(ids) {
+        const query = `SELECT * FROM users where _id in ('${ ids.join("', '") }')`;
+
+        return db.query(query)
+            .then(resArr => {
+                return resArr.rows.map(res => {
+                    const {_id: id, username, password, name, links, avatar, bech32_address, email} = res;
+                    return {
+                        id, username, password, name, avatar, bech32: bech32_address, email, links
+                    }
+                });
+            });
+    },
     fetchByID(id) {
         const query = `SELECT * FROM users where _id=$1`;
 

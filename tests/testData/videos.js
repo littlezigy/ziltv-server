@@ -18,7 +18,6 @@ for(let i = 0; i < faker.datatype.number({min: 10, max:15}); i++) {
 
     const url = videoUrls[i] || faker.internet.url();
     const thumbnail = thumbnails[i] || faker.internet.avatar();
-    console.log("thumbnail:", thumbnail, i + 1);
 
     videos.push({
         id: i + 1,

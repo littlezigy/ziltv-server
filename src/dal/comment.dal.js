@@ -28,6 +28,23 @@ module.exports = {
                     }
                 } else return {}
             });
+    },
+
+    fetchByVideoID(id) {
+        const query = `SELECT _id as id, video, text_ as text, user_ as user FROM comments WHERE video=$1`;
+        const values = [id];
+
+        return db.query(query, values)
+            .then(resArr => {
+                return resArr.rows.map(res => {
+                    const { text, user, video } = res;
+                    return {
+                        text,
+                        userID: user,
+                        videoID: video
+                    }
+                });
+            });
     }
 }
 

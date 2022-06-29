@@ -25,13 +25,18 @@ router.get('/creator/badges/:id', function(req, res) {
 });
 
 router.post('/comment', function(req, res) {
-    return comment.post(req.body)
+    return comment.post(req.body, req)
         .then(payload => res.send(payload));
 });
 
 router.get('/comment/:id', function(req, res) {
     console.log("Fetching:", req.params.id);
     return comment.fetch(req.params.id)
+        .then(payload => res.send(payload));
+});
+
+router.get('/video/:id/comments', function(req, res) {
+    return comment.fetchByVideo(req.params.id)
         .then(payload => res.send(payload));
 });
 
@@ -78,6 +83,10 @@ router.post('/login', function(req, res) {
 router.post('/signup', function(req, res) {
     return user.signup(req.body, req)
         .then(payload => res.send(payload));
+});
+
+router.use((err, req, res, next) => {
+    return errorHandler(err, req, res, next);
 });
 
 module.exports = router;

@@ -35,7 +35,8 @@ describe('Routes', function() {
         const data = {
             videoID: 4, user: 3, text: faker.lorem.paragraph()}
 
-        return request(app).post('/comment').send(data)
+        return request(app).post('/login').send(data)
+            .then(res => request(app).post('/comment').send(data).set('Cookie', res.headers['set-cookie']))
             .then(res => {
                 expect(res.body).to.have.property('id').that.is.a('number');
 
@@ -55,6 +56,16 @@ describe('Routes', function() {
                 expect(res.headers).to.have.property('set-cookie');
                 expect(res.headers['set-cookie'][0]).to.have.string('ziltv.cookie');
                 expect(res.headers['set-cookie'][0]).to.match(/^ziltv\.cookie/);
+
+                // Expires=Wed, 06 Jul 2022 06:31:52 GMT
+                let expires = res.headers['set-cookie'][0].match(/(?<=Expires=)[^;]+(?=;)/);
+                expires = expires[0];
+                expires = new Date(expires);
+                const now = new Date();
+                const oneWeek = new Date().setDate(now.getDate() + 7);
+
+                expect( expires.getTime(), 'Cookie should not have expired').to.be.greaterThan( now.getTime() )
+                expect( expires.getTime(), 'Cookie should be valid for a week').to.be.greaterThan( oneWeek - 3000 )
 
                 return request(app).post('/login').send(data)
             })

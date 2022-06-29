@@ -12,7 +12,7 @@
     "lint": "eslint src/ tests/ -c ./.eslintrc.js",
     "test:unit": ". ./.env.local.test && npm run lint && NODE_ENV=test mocha tests/unit/ --require tests/unit/__hooks.js --recursive --timeout 1000",
     "test:integration": ". ./.env.local.test && npm run lint && NODE_ENV=test mocha tests/integration/ --require tests/integration/__hooks.js --recursive --timeout 10000 --startupDB",
-    "test:functional": ". ./.env.local.test && npm run lint && NODE_ENV=test mocha tests/functional/ tests/routes/ --require tests/functional/__hooks.js --recursive --timeout 10000 --startupDB",
+    "test:functional": ". ./.env.local.test && npm run lint && NODE_ENV=test mocha tests/functional/ --require tests/functional/__hooks.js --recursive --timeout 10000 --startupDB",
 
     "backupDB": ". ./SQL/scripts/saveData.sh",
     "exportSchema": ". ./SQL/scripts/exportSchema.sh",

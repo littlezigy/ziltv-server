@@ -1,3 +1,4 @@
+const comments = require('./comments');
 const users = require('./users');
 const badges = require('./badges');
 const videos = require('./videos');
@@ -45,6 +46,16 @@ module.exports = function() {
 
         promiseChain = promiseChain.then(() => db.query(query, values))
             .catch(e => console.log('ERROR:', e, '\nQuery:', query));
+    });
+
+    Object.values(comments).forEach(comment => {
+        const query = `INSERT INTO comments(_id, user_, video, text_) VALUES($1, $2, $3, $4)`;
+        const { id, user_id, video_id, text } = comment;
+        const values = [ id, user_id, video_id, text ];
+
+        promiseChain = promiseChain.then(() => db.query(query, values))
+            .catch(e => console.log('ERROR:', e, '\nQuery:', query));
+
     });
 
     return promiseChain;
