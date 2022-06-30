@@ -4,5 +4,9 @@ module.exports = {
         // origin: '*',
         credentials: true
     },
+    cookieSettings: {
+        sameSite: 'strict',
+        httpOnly: true
+    }
 }
 

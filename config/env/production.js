@@ -10,7 +10,7 @@ module.exports = {
         httpOnly: true
     },
     cors: {
-        origin: ['https://ziltv.adesuwa.dev'],
+        origin: 'https://ziltv.adesuwa.dev',
         credentials: true
     },
 }
