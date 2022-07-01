@@ -23,5 +23,5 @@ BACKUP_FILE="$BACKUP_DIR/db_backup_$NODE_ENV.sql"
 
 # Import saved data into database
 if test -f "$BACKUP_FILE"; then
-        sql $url -c "\i $BACKUP_FILE"
+        psql $url -c "\i $BACKUP_FILE"
 fi
