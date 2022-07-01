@@ -6,28 +6,39 @@ const request = require('supertest');
 
 describe('Routes', function() {
     const videoID = videos[2].id;
-    it('Creator set badge at /badge', function() {
-        const creator = users[2].id;
+
+    it.only('Creator set and get badges', function() {
+        const creatorIndex = 1;
+        const creatorID = users[creatorIndex].id;
+        let cookie;
 
         const data = {
-            creator: users[2].id,
             badgeImg: faker.internet.url(),
             specifyTokens: 'false',
             nftAddress: faker.finance.ethereumAddress(),
         }
 
-        return request(app).post('/badge').send(data)
+        return request(app).post('/login').send(users[creatorIndex])
+            .then(res => {
+                cookie = res.headers['set-cookie'][0];
+                return request(app).post('/badge').send(data).set('Cookie', cookie)
+            })
             .then(res => {
                 expect(res.body).to.have.property('id').that.is.a('number');
 
-                return request(app).get('/creator/badges/' + 1)
-            })
-            .then(res => {
-                expect(res.body).to.have.lengthOf.at.least(4);
-                return request(app).get('/creator/badges/' + creator)
+                return request(app).get('/badges').set('Cookie', cookie)
             })
             .then(res => {
                 expect(res.body).to.include.deep.members([data]);
+            });
+    });
+
+    it.only('Get other creator badges', function() {
+        const user = users[2];
+
+        return request(app).get('/creator/' + 1 + "/badges/")
+            .then(res => {
+                expect(res.body).to.have.lengthOf.at.least(4);
             });
     });
 

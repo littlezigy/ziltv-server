@@ -14,30 +14,40 @@ router.use((err, req, res, next) => {
     return errorHandler(err, req, res, next);
 });
 
-router.post('/badge', function(req, res) {
-    return badge.assignBadge(req.body)
-        .then(payload => res.send(payload));
+router.post('/badge', function(req, res, next) {
+    return badge.assignBadge(req.body, req)
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
-router.get('/creator/badges/:id', function(req, res) {
+router.get('/badges', function(req, res, next) {
+    return badge.fetchCreatorBadges(req)
+        .then(payload => res.send(payload))
+    .catch(e => next(e));
+});
+
+router.get('/creator/:id/badges', function(req, res, next) {
     return badge.fetchCreatorBadges(req.params.id)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
-router.post('/comment', function(req, res) {
+router.post('/comment', function(req, res, next) {
     return comment.post(req.body, req)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
-router.get('/comment/:id', function(req, res) {
-    console.log("Fetching:", req.params.id);
+router.get('/comment/:id', function(req, res, next) {
     return comment.fetch(req.params.id)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
-router.get('/video/:id/comments', function(req, res) {
+router.get('/video/:id/comments', function(req, res, next) {
     return comment.fetchByVideo(req.params.id)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
 router.get('/videos', function(req, res) {
@@ -45,9 +55,22 @@ router.get('/videos', function(req, res) {
         .then(payload => res.send(payload));
 });
 
-router.post('/video', function(req, res) {
+router.get('/creator/:id/videos', function(req, res, next) {
+    return video.fetchByCreator(req.params.id)
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
+});
+
+router.get('/my-videos', function(req, res, next) {
+    return video.fetchByCreator(req)
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
+});
+
+router.post('/video', function(req, res, next) {
     return video.post(req.body, req)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
 router.put('/video/:id', function(req, res) {
@@ -60,9 +83,10 @@ router.get('/video/:id', function(req, res) {
         .then(payload => res.send(payload));
 });
 
-router.get('/profile', function(req, res) {
+router.get('/profile', function(req, res, next) {
     return user.viewProfile(req)
-    .then(payload => res.send(payload));
+    .then(payload => res.send(payload))
+    .catch(e => next(e));
 });
 
 router.get('/profile/:id', function(req, res) {
@@ -70,19 +94,22 @@ router.get('/profile/:id', function(req, res) {
     .then(payload => res.send(payload));
 });
 
-router.put('/profile', function(req, res) {
+router.put('/profile', function(req, res, next) {
     return user.editProfile(req.body, req)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
-router.post('/login', function(req, res) {
+router.post('/login', function(req, res, next) {
     return user.login(req.body, req)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
-router.post('/signup', function(req, res) {
+router.post('/signup', function(req, res, next) {
     return user.signup(req.body, req)
-        .then(payload => res.send(payload));
+        .then(payload => res.send(payload))
+        .catch(e => next(e));
 });
 
 router.use((err, req, res, next) => {

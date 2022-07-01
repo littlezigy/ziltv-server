@@ -59,6 +59,18 @@ module.exports = {
             });
     },
 
+    fetchByCreator(id) {
+        const query = `SELECT * from ${table} WHERE creator=$1`;
+
+        return db.query(query, [id])
+            .then(res => {
+                return res.rows.map(data => {
+                    const {name, description, creator, url, thumbnail_url}=data;
+                    return {id: data._id, name, description, creator, url, thumbnail: thumbnail_url}
+                });
+            });
+    },
+
     fetchAll() {
         const query = `SELECT * from ${table}`;
 

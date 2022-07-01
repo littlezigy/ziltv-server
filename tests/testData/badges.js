@@ -13,7 +13,6 @@ for(let i = 0; i < faker.datatype.number({min: 10, max:15}); i++) {
         users[faker.datatype.number(users.length-1)].id;
 
     const tokenIDs = JSON.stringify([...new Set(faker.datatype.number().toString().split(''))]);
-    console.log("tokenids:", tokenIDs);
     const url = faker.internet.url();
 
     badges.push({

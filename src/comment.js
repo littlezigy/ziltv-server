@@ -16,36 +16,38 @@ module.exports = {
 
     fetch(id) {
         return dal.fetchByID(id)
-        .then(res => {
-            return {
-                ...res,
-                poster: res.userID
-            }
-        });
+            .then(res => {
+                return {
+                    ...res,
+                    poster: res.userID
+                }
+            });
     },
 
     fetchByVideo(videoID) {
         return dal.fetchByVideoID(videoID)
             .then(res => {
-                return userDal.fetchByIDs(res.map(v => v.userID))
-                .then(c_res => {
-                    const posters = {};
-                    c_res.forEach(c => posters[c.id] = c);
+                if(res.length > 0) {
+                    return userDal.fetchByIDs(res.map(v => v.userID))
+                        .then(c_res => {
+                            const posters = {};
+                            c_res.forEach(c => posters[c.id] = c);
 
-                    return res.map(c => {
-                        const p = posters[c.userID];
-                        const poster = {
-                            id: p.id,
-                            name: p.name,
-                            bech32: p.bech32,
-                        }
-                        const video = {id: c.videoID}
+                            return res.map(c => {
+                                const p = posters[c.userID];
+                                const poster = {
+                                    id: p.id,
+                                    name: p.name,
+                                    bech32: p.bech32,
+                                }
+                                const video = {id: c.videoID}
 
-                        return {
-                            poster, text: c.text, video
-                        }
-                    });
-                });
+                                return {
+                                    poster, text: c.text, video
+                                }
+                            });
+                        });
+                } else return []
             });
     }
 }

@@ -17,7 +17,8 @@ module.exports = function(e, req, res, next) {
             res.status(400);
         else if(e instanceof UnauthorizedError)
             res.status(401);
-    }
+    } else
+        console.log(e);
 
     return res.send({
         error

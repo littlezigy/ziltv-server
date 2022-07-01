@@ -13,7 +13,6 @@
     "test:unit": ". ./.env.local.test && npm run lint && NODE_ENV=test mocha tests/unit/ --require tests/unit/__hooks.js --recursive --timeout 1000",
     "test:integration": ". ./.env.local.test && npm run lint && NODE_ENV=test mocha tests/integration/ --require tests/integration/__hooks.js --recursive --timeout 10000 --startupDB",
     "test:functional": ". ./.env.local.test && npm run lint && NODE_ENV=test mocha tests/functional/ --require tests/functional/__hooks.js --recursive --timeout 10000 --startupDB",
-
     "backupDB": ". ./SQL/scripts/saveData.sh",
     "exportSchema": ". ./SQL/scripts/exportSchema.sh",
     "updateSchema": ". ./SQL/scripts/importSchema.sh && . ./SQL/scripts/importSavedData.sh"
@@ -24,6 +23,7 @@
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
     "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
     "cors": "^2.8.5",
     "eslint": "^8.18.0",
     "faker": "^6.6.6",

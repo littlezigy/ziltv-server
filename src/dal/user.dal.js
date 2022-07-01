@@ -5,6 +5,7 @@ module.exports = {
         return Promise.resolve(true);
     },
     fetchByIDs(ids) {
+        console.log('ids:', ids);
         const query = `SELECT * FROM users where _id in ('${ ids.join("', '") }')`;
 
         return db.query(query)
@@ -26,9 +27,9 @@ module.exports = {
 
             if(res.length == 1) {
                 res = res[0]
-                const {_id: id, username, password, name, links, avatar, email} = res;
+                const {_id: id, username, password, bech32_address, name, links, avatar, email} = res;
                 return {
-                    id, username, password, name, avatar,email, links
+                    id, username, password, bech32: bech32_address, name, avatar,email, links
                 }
             } else return false;
         });
@@ -42,9 +43,9 @@ module.exports = {
 
             if(res.length == 1) {
                 res = res[0]
-                const {_id: id, username, password, name, avatar, email} = res;
+                const {_id: id, username, password, name, links, avatar, bech32_address, email} = res;
                 return {
-                    id, username, password, name, avatar,email
+                    id, username, password, name, avatar, bech32: bech32_address, email, links
                 }
             }
         });
