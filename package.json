@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "pm2 start ./bin/www.js --name ziltv_api",
+    "start": ". ./.env.local && pm2 start ./bin/www.js --name ziltv_api",
     "stop": "pm2 stop ziltv_api && pm2 delete ziltv_api",
     "restart": "npm run stop && npm i && npm run start",
     "dev": "npm run lint && . ./.env.local && NODE_ENV=development node ./bin/www.js",
