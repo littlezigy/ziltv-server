@@ -5,6 +5,8 @@ const badgeDal = require('../../src/dal/badge.dal');
 const db = require('../../config/database')();
 const { users } = require('../testData');
 
+const { fakeReq } = require('../utils');
+
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
@@ -17,8 +19,6 @@ function writeStubs() {
         }
     }
 }
-
-const fakeReq = () => JSON.parse(faker.datatype.json());
 
 describe('Badge module', function() {
     it('Creator set and retrieve badge', function() {

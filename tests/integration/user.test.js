@@ -5,6 +5,12 @@ const { ClientError, UnauthorizedError } = require('../../src/errors');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
+const zilCrypto = require('@zilliqa-js/crypto');
+
+const { toBech32Address, getAddressFromPrivateKey, } = require('@zilliqa-js/crypto');
+
+const { fakeReq } = require('../utils');
+
 const path = '../../src/user';
 const authPath = './session';
 function writeStubs() {
@@ -62,6 +68,36 @@ describe('User module', function() {
 
         return expect(userModule.login(data, reqObj)).to.be.rejectedWith(ClientError, 'Wrong username or password');
     });
+
+    it.skip('Signup: allow signup with wallet #finish-later', function() {
+        const pk = zilCrypto.schnorr.generatePrivateKey();
+        const pubkey = zilCrypto.getPubKeyFromPrivateKey(pk);
+        const addr = zilCrypto.getAddressFromPrivateKey(pk);
+        let message = 'I am signing into ZilTv at' + (new Date()).toUTCString();
+        console.log('pk:', pk);
+        console.log('zilCrypto:', zilCrypto);
+        console.log('pubkey:', pubkey);
+        console.log('addr:', addr);
+        message = zilCrypto.encodeBase58(message);
+        const siggy = zilCrypto.sign(message, pk, pubkey)
+        // TODO: Finish later
+        // const data = 
+            /*
+        return userModule.signup(data)
+        .then(res => {
+            expect(
+        });
+            */
+    });
+
+    it('Signup: throw if username and/or password not set', function() {
+        const stubs = writeStubs();
+        const userModule = proxyquire(path, stubs);
+
+        return expect(userModule.signup({username: null, password: null}, fakeReq())).to.be.rejectedWith(ClientError)
+            .then(() => expect(userModule.signup({}, fakeReq())).to.be.rejectedWith(ClientError))
+    });
+
     it('Signup', function() {
         const data = {username: faker.internet.userName(),
             password: faker.internet.password()

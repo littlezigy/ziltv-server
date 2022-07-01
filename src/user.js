@@ -23,6 +23,9 @@ module.exports = {
             });
     },
     signup(data, reqObj) {
+        if(!data.username || !data.password)
+            return Promise.reject(new ClientError('Bad signup request'))
+
         return dal.create(data)
             .then(res => {
                 if(res) {
