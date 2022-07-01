@@ -26,7 +26,9 @@ module.exports = {
         if(!data.username || !data.password)
             return Promise.reject(new ClientError('Bad signup request'))
 
-        return dal.create(data)
+        const defaultAvatar = 'https://bafybeifgj5aut4m4tfz3prvkhj2jc6wan2qoeaixp36zjgrguqqioxdcdi.ipfs.infura-ipfs.io/';
+
+        return dal.create({...data, avatar: defaultAvatar})
             .then(res => {
                 if(res) {
                     const { id, username, avatar } = res;

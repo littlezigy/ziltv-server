@@ -50,9 +50,9 @@ module.exports = {
             }
         });
     },
-    create({name, username, password}) {
-        const query = `INSERT INTO users(name, username, password) VALUES($1, $2, $3) RETURNING *`
-        const values = [name, username, password];
+    create({name, username, avatar, password}) {
+        const query = `INSERT INTO users(name, username, avatar, password) VALUES($1, $2, $3, $4) RETURNING *`
+        const values = [name, username, avatar, password];
         return db.query(query, values)
         .then(res => {
             res = res.rows;

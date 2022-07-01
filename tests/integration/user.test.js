@@ -2,8 +2,10 @@ const { expect } = require('chai');
 const { faker } = require('@faker-js/faker');
 const { users } = require('../testData');
 const { ClientError, UnauthorizedError } = require('../../src/errors');
+const defaultAvatar = require('../../src/defaultAvatar');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const userDal = require('../../src/dal/user.dal');
 
 const zilCrypto = require('@zilliqa-js/crypto');
 
@@ -114,6 +116,26 @@ describe('User module', function() {
             .then(res => {
                 sinon.assert.calledWith(spy, sinon.match.has('username', data.username), reqObj);
                 expect(res).to.have.property('id').that.is.a('number');
+            });
+    });
+
+    it('Signup creates default avatar', function() {
+        const data = {username: faker.internet.userName(),
+            password: faker.internet.password()
+        };
+        const reqObj = 4;
+
+        const spy = sinon.fake.returns(true);
+
+        const stubs = writeStubs();
+        stubs[authPath].startSession = spy;
+        const userModule = proxyquire(path, stubs);
+
+        return userModule.signup(data, reqObj)
+            .then(res => {
+                return userDal.fetchByID(res.id)
+            }).then(res => {
+                expect(res).to.have.property('avatar', defaultAvatar);
             });
     });
 });
